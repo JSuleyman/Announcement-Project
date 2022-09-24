@@ -19,18 +19,18 @@ public class AccountController {
     }
 
     @GetMapping("/getUserBalance")
-    public ResponseEntity<Double> getUserAccountBalance(@RequestParam Integer id, @RequestParam String password) throws AccountBalanceException {
-        return new ResponseEntity<>(accountService.getUserAccountBalance(id, password), HttpStatus.ACCEPTED);
+    public ResponseEntity<Double> getUserAccountBalance(@RequestParam Integer id) throws AccountBalanceException {
+        return new ResponseEntity<>(accountService.getUserAccountBalance(id), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/increaseBalance")
-    ResponseEntity<Double> increaseBalance(@RequestParam Double balance, @RequestParam Integer id, @RequestParam String password) throws AccountBalanceException {
-        return new ResponseEntity<>(accountService.increaseBalance(balance, id, password), HttpStatus.ACCEPTED);
+    ResponseEntity<Double> increaseBalance(@RequestParam Double balance, @RequestParam Integer id) throws AccountBalanceException {
+        return new ResponseEntity<>(accountService.increaseBalance(balance, id), HttpStatus.ACCEPTED);
     }
 
 
     @PostMapping("/doVIP")
-    ResponseEntity<Double> doVIP(@RequestParam Integer id, @RequestParam String password) throws AccountBalanceException {
-        return new ResponseEntity<>(accountService.doVIP(id, password), HttpStatus.ACCEPTED);
+    ResponseEntity<Double> doVIP(@RequestParam Integer id) throws AccountBalanceException {
+        return new ResponseEntity<>(accountService.doVIP(id), HttpStatus.ACCEPTED);
     }
 }
