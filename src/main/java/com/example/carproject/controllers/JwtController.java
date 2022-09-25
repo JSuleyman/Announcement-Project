@@ -1,6 +1,6 @@
 package com.example.carproject.controllers;
 
-import com.example.carproject.helper.JwtUtil;
+import com.example.carproject.utils.JwtUtil;
 import com.example.carproject.models.JwtRequest;
 import com.example.carproject.models.JwtResponse;
 import com.example.carproject.services.impl.CustomUserDetailsServiceImpl;

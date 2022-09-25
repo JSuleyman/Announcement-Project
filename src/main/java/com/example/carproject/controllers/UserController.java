@@ -1,20 +1,11 @@
 package com.example.carproject.controllers;
 
 import com.example.carproject.dto.UserDTO;
-import com.example.carproject.helper.JwtUtil;
-import com.example.carproject.models.JwtRequest;
-import com.example.carproject.models.JwtResponse;
 import com.example.carproject.models.User;
-import com.example.carproject.services.impl.CustomUserDetailsServiceImpl;
 import com.example.carproject.services.inter.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

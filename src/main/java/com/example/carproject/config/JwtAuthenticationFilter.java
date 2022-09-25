@@ -1,6 +1,6 @@
 package com.example.carproject.config;
 
-import com.example.carproject.helper.JwtUtil;
+import com.example.carproject.utils.JwtUtil;
 import com.example.carproject.services.impl.CustomUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

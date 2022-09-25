@@ -1,4 +1,4 @@
-package com.example.carproject.helper;
+package com.example.carproject.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
