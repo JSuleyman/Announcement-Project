@@ -16,7 +16,7 @@ public interface AnnouncementService {
 
     void createAnnouncement(Announcement createAnnounce, Integer userId);
 
-    void updateAnnouncement(Integer id, Announcement updateAnnouncement);
+    void updateAnnouncement(Integer id, Announcement updateAnnouncement, String userName);
 
-    void deleteById(Integer id);
+    void deleteById(Integer id, String userName);
 }

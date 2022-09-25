@@ -70,11 +70,11 @@ public class AnnouncementController {
     }
 
     @PutMapping("/updateAnnouncement/{id}")
-    public void updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement createAnnounce){
-        announcementService.updateAnnouncement(id, createAnnounce);
+    public void updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement createAnnounce, @RequestParam String userName){
+        announcementService.updateAnnouncement(id, createAnnounce, userName);
     }
     @DeleteMapping("/deleteById")
-    public void deleteById(@RequestParam Integer id){
-        announcementService.deleteById(id);
+    public void deleteById(@RequestParam Integer id,@RequestParam String userName){
+        announcementService.deleteById(id, userName);
     }
 }

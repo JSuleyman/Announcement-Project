@@ -1,7 +1,6 @@
 package com.example.carproject.controllers;
 
 
-import com.example.carproject.exceptions.AccountBalanceException;
 import com.example.carproject.services.inter.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,18 +18,18 @@ public class AccountController {
     }
 
     @GetMapping("/getUserBalance")
-    public ResponseEntity<Double> getUserAccountBalance(@RequestParam Integer id) throws AccountBalanceException {
-        return new ResponseEntity<>(accountService.getUserAccountBalance(id), HttpStatus.ACCEPTED);
+    public ResponseEntity<Double> getUserAccountBalance(@RequestParam Integer id, @RequestParam String userName){
+        return new ResponseEntity<>(accountService.getUserAccountBalance(id, userName), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/increaseBalance")
-    ResponseEntity<Double> increaseBalance(@RequestParam Double balance, @RequestParam Integer id) throws AccountBalanceException {
+    ResponseEntity<Double> increaseBalance(@RequestParam Double balance, @RequestParam Integer id){
         return new ResponseEntity<>(accountService.increaseBalance(balance, id), HttpStatus.ACCEPTED);
     }
 
 
     @PostMapping("/doVIP")
-    ResponseEntity<Double> doVIP(@RequestParam Integer id) throws AccountBalanceException {
+    ResponseEntity<Double> doVIP(@RequestParam Integer id){
         return new ResponseEntity<>(accountService.doVIP(id), HttpStatus.ACCEPTED);
     }
 }

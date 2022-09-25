@@ -2,7 +2,6 @@ package com.example.carproject.services.impl;
 
 import com.example.carproject.daos.inter.AnnounceDAO;
 import com.example.carproject.enums.*;
-import com.example.carproject.exceptions.InCorrectPassword;
 import com.example.carproject.exceptions.NotFoundAnnouncement;
 import com.example.carproject.exceptions.NotFoundUser;
 import com.example.carproject.models.Announcement;
@@ -41,7 +40,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public Optional<Announcement> getById(Integer id) {
 
-        if (announcementRepository.findById(id).isEmpty()) throw new NotFoundAnnouncement();{
+        if (announcementRepository.findById(id).isEmpty()) throw new NotFoundAnnouncement();
+        {
             return announcementRepository.findById(id);
         }
 
@@ -78,41 +78,46 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         if (!(Objects.equals(createAnnounce.getUserId().getId(), userId) && user != null)) throw new NotFoundUser();
         {
 
-                announceDAO.createAnnouncement(createAnnounce, userId);
+            announceDAO.createAnnouncement(createAnnounce, userId);
         }
     }
 
     @Override
-    public void updateAnnouncement(Integer id, Announcement updateAnnouncement) {
-
+    public void updateAnnouncement(Integer id, Announcement updateAnnouncement, String userName) {
         Optional<Announcement> announcement = announcementRepository.findById(id);
 
         if (!announcement.isPresent()) throw new NotFoundAnnouncement();
         {
 
-                    Announcement announcement1 = announcement.get();
+            if (!announcement.get().getUserId().getName().equals(userName)) throw new NotFoundUser();
+            {
 
-                    announcement1.setMileage(updateAnnouncement.getMileage());
-                    announcement1.setColor(updateAnnouncement.getColor());
-                    announcement1.setPrice(updateAnnouncement.getPrice());
-                    announcement1.setCurrency(updateAnnouncement.getCurrency());
-                    announcement1.setRepair(updateAnnouncement.getRepair());
-                    announcement1.setVendorType(updateAnnouncement.getVendorType());
-                    announcement1.setSalesType(updateAnnouncement.getSalesType());
-                    announcement1.setDescription(updateAnnouncement.getDescription());
-                    announcement1.setVehicleEquip(updateAnnouncement.getVehicleEquip());
+                Announcement announcement1 = announcement.get();
 
-                    announcementRepository.save(announcement1);
+                announcement1.setMileage(updateAnnouncement.getMileage());
+                announcement1.setColor(updateAnnouncement.getColor());
+                announcement1.setPrice(updateAnnouncement.getPrice());
+                announcement1.setCurrency(updateAnnouncement.getCurrency());
+                announcement1.setRepair(updateAnnouncement.getRepair());
+                announcement1.setVendorType(updateAnnouncement.getVendorType());
+                announcement1.setSalesType(updateAnnouncement.getSalesType());
+                announcement1.setDescription(updateAnnouncement.getDescription());
+                announcement1.setVehicleEquip(updateAnnouncement.getVehicleEquip());
+
+                announcementRepository.save(announcement1);
             }
+        }
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id, String userName) {
         Optional<Announcement> announcement = announcementRepository.findById(id);
 
-        if (!announcement.isPresent()) throw new NotFoundAnnouncement();
+        if (announcement.isPresent()) throw new NotFoundAnnouncement();
         {
+            if (!announcement.get().getUserId().getName().equals(userName)) throw new NotFoundUser();{
                 announcementRepository.deleteById(id);
+            }
         }
     }
 }
