@@ -78,7 +78,7 @@ public class Announcement {
     Integer carYear;
 
     @Column(name = "engine_volume", nullable = false)
-    Integer engineVolume;
+    Double engineVolume;
 
     @Column(name = "engine_power", nullable = false)
     Integer enginePower;

@@ -56,7 +56,7 @@ public class AnnounceImplDAO implements AnnounceDAO {
                 .executeUpdate();
     }
     @Override
-    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double price, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer carYear, Integer engineVolume, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
+    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double minPrice, Double maxPrice, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer minYear, Integer maxYear, Double minEngineVolume, Double maxEngineVolume, Integer minEnginePower, Integer maxEnginePower, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
         String sql = "SELECT a from Announcement a where 1=1";
 
         if (brandName != null) {
@@ -87,8 +87,12 @@ public class AnnounceImplDAO implements AnnounceDAO {
             sql += " AND a.color =: color";
         }
 
-        if (price != null) {
-            sql += " AND a.price =: price";
+        if (minPrice != null) {
+            sql += " AND a.price >=: minPrice";
+        }
+
+        if (maxPrice != null) {
+            sql += " AND a.price <=: maxPrice";
         }
 
         if (currency != null) {
@@ -111,12 +115,28 @@ public class AnnounceImplDAO implements AnnounceDAO {
             sql += " AND a.gearbox =: gearbox";
         }
 
-        if (carYear != null) {
-            sql += " AND a.carYear =: carYear";
+        if (minYear != null){
+            sql += " AND a.carYear >=: minYear";
         }
 
-        if (engineVolume != null) {
-            sql += " AND a.engineVolume =: engineVolume";
+        if (maxYear != null){
+            sql += " AND a.carYear <=: maxYear";
+        }
+
+        if (minEngineVolume != null) {
+            sql += " AND a.engineVolume >=: minEngineVolume";
+        }
+
+        if (maxEngineVolume != null) {
+            sql += " AND a.engineVolume <=: maxEngineVolume";
+        }
+
+        if (minEnginePower != null) {
+            sql += " AND a.enginePower >=: minEnginePower";
+        }
+
+        if (maxEnginePower != null) {
+            sql += " AND a.enginePower <=: maxEnginePower";
         }
 
         if (marketAddresses != null) {
@@ -169,8 +189,12 @@ public class AnnounceImplDAO implements AnnounceDAO {
             q.setParameter("color", color);
         }
 
-        if (price != null) {
-            q.setParameter("price", price);
+        if (minPrice != null) {
+            q.setParameter("minPrice", minPrice);
+        }
+
+        if (maxPrice != null) {
+            q.setParameter("maxPrice", maxPrice);
         }
 
         if (currency != null) {
@@ -193,12 +217,28 @@ public class AnnounceImplDAO implements AnnounceDAO {
             q.setParameter("gearbox", gearbox);
         }
 
-        if (carYear != null) {
-            q.setParameter("carYear", carYear);
+        if (minYear != null){
+            q.setParameter("minYear", minYear);
         }
 
-        if (engineVolume != null) {
-            q.setParameter("engineVolume", engineVolume);
+        if (maxYear != null){
+            q.setParameter("maxYear", maxYear);
+        }
+
+        if (minEngineVolume != null) {
+            q.setParameter("minEngineVolume", minEngineVolume);
+        }
+
+        if (maxEngineVolume != null) {
+            q.setParameter("maxEngineVolume", maxEngineVolume);
+        }
+
+        if (minEnginePower != null) {
+            q.setParameter("minEnginePower", minEnginePower);
+        }
+
+        if (maxEnginePower != null) {
+            q.setParameter("maxEnginePower", maxEnginePower);
         }
 
         if (marketAddresses != null) {

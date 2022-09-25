@@ -4,6 +4,8 @@ import com.example.carproject.models.Announcement;
 
 public class AnnounceSearchDTO {
     Integer id;
+
+    String phoneNumber;
     String cityName;
     String brandName;
     String modelName;
@@ -18,7 +20,7 @@ public class AnnounceSearchDTO {
     String transmitter;
     String gearbox;
     Integer carYear;
-    Integer engineVolume;
+    Double engineVolume;
     Integer enginePower;
     String marketAddresses;
     String repair;
@@ -29,6 +31,7 @@ public class AnnounceSearchDTO {
 
     public AnnounceSearchDTO(Announcement c) {
         this.id = c.getId();
+        this.phoneNumber = c.getUserId().getPhoneNumber();
         this.cityName = c.getUserId().getCityId().getCityName();
         this.brandName = c.getBrandId().getBrandName();
         this.modelName = c.getModelId().getModelName();
@@ -55,6 +58,10 @@ public class AnnounceSearchDTO {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public String getCityName() {
@@ -113,7 +120,7 @@ public class AnnounceSearchDTO {
         return carYear;
     }
 
-    public Integer getEngineVolume() {
+    public Double getEngineVolume() {
         return engineVolume;
     }
 

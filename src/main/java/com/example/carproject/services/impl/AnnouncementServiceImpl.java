@@ -49,9 +49,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double price, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer carYear, Integer engineVolume, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
+    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double minPrice, Double maxPrice, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer minYear, Integer maxYear, Double minEngineVolume, Double maxEngineVolume, Integer minEnginePower, Integer maxEnginePower, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
 
-        List<Announcement> announcementList = announceDAO.getSearch(brandName, modelName, cityName, banType, mileage, mileageType, color, price, currency, ownersNumber, fuelType, transmitter, gearbox, carYear, engineVolume, marketAddresses, repair, seatsNumber, vendorType, salesType);
+        List<Announcement> announcementList = announceDAO.getSearch(brandName, modelName, cityName, banType, mileage, mileageType, color, minPrice, maxPrice, currency, ownersNumber, fuelType, transmitter, gearbox, minYear, maxYear, minEngineVolume, maxEngineVolume, minEnginePower, maxEnginePower, marketAddresses, repair, seatsNumber, vendorType, salesType);
 
         List<Announcement> announcements = new ArrayList<>();
 
