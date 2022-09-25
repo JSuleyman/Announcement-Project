@@ -19,8 +19,7 @@ import javax.validation.constraints.Min;
 @Data
 public class Announcement {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "create_announce")
-    @SequenceGenerator(name = "create_announce", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     Integer id;
 
