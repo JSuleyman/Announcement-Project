@@ -6,6 +6,7 @@ import com.example.announcementproject.models.User;
 import com.example.announcementproject.repositories.UserRepository;
 import com.example.announcementproject.services.inter.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,8 +36,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    private static final BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
     @Override
     public void registerUser(User user) {
+        user.setPassword(crypt.encode(user.getPassword()));
         createUserDAO.createUser(user);
     }
 
