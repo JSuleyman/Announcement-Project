@@ -42,4 +42,4 @@
 
 * When the announcement is searched, the VIP announcements are first seen by the user, and then the non-VIP announcements are seen by the user.
 
-* There are different types of relations between models.
+* There are different types of bidirectional relationship between models.
