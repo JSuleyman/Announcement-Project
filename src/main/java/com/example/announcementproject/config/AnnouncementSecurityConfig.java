@@ -38,8 +38,9 @@ public class AnnouncementSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/token").permitAll()
-                .antMatchers("/user/register").permitAll()
-                .antMatchers("/announce/getSearch").permitAll()
+                .antMatchers("/users/new").permitAll()
+                .antMatchers("/announcements/search").permitAll()
+                .antMatchers("/announcements").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -53,7 +54,7 @@ public class AnnouncementSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

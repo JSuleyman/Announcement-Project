@@ -1,34 +1,29 @@
 package com.example.announcementproject.services.impl;
 
 import com.example.announcementproject.daos.inter.CreateUserDAO;
-import com.example.announcementproject.exceptions.NotFoundUser;
+import com.example.announcementproject.exceptions.UserNotFoundException;
 import com.example.announcementproject.models.User;
 import com.example.announcementproject.repositories.UserRepository;
 import com.example.announcementproject.services.inter.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
+    private final UserRepository userRepository;
 
-    UserRepository userRepository;
-    CreateUserDAO createUserDAO;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, CreateUserDAO createUserDAO) {
-        this.userRepository = userRepository;
-        this.createUserDAO = createUserDAO;
-    }
+    private final CreateUserDAO createUserDAO;
 
     @Override
-    public User getUserById(Integer id) {
-        if (userRepository.getUserById(id) == null) throw new NotFoundUser();
-        {
-            return userRepository.getUserById(id);
-        }
+    public User getUserById(Integer userId) {
+        return userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -36,36 +31,32 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    private static final BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
     @Override
-    public void registerUser(User user) {
+    public void register(User user) {
         user.setPassword(crypt.encode(user.getPassword()));
         createUserDAO.createUser(user);
     }
 
     @Override
-    public void updateUser(Integer id, User user) {
-        User user1 = userRepository.getUserById(id);
+    public void update(Integer userId, User user) {
+        User updateUser = userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-        if (user1 == null) throw new NotFoundUser();
-        {
-            user1.setName(user.getName());
-            user1.setEmail(user.getEmail());
-            user1.setPassword(user.getPassword());
-            user1.setPhoneNumber(user.getPhoneNumber());
-            user1.setCityId(user.getCityId());
+        updateUser.setName(user.getName());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setPhoneNumber(user.getPhoneNumber());
+        updateUser.setCityId(user.getCityId());
 
-            userRepository.save(user1);
-        }
+        userRepository.save(updateUser);
     }
 
     @Override
-    public void deleteUserById(Integer id) {
+    public void deleteById(Integer userId) {
+        User user = userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-        if (userRepository.getUserById(id) == null) throw new NotFoundUser();
-        {
-            userRepository.deleteById(id);
-        }
-
+        userRepository.deleteById(user.getId());
     }
 }

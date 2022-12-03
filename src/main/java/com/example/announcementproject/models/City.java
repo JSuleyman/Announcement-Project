@@ -15,18 +15,16 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class City {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Integer id;
 
-    @Column(name = "city_name", nullable = false)
+    @Column(name = "city_name", nullable = false, unique = true)
     String cityName;
 
     @OneToMany(mappedBy = "cityId", fetch = FetchType.LAZY)
     private Collection<User> userCollection;
-
 
     public City(Integer id) {
         this.id = id;

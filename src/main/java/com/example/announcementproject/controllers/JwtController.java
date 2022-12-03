@@ -4,6 +4,7 @@ import com.example.announcementproject.utils.JwtUtil;
 import com.example.announcementproject.models.JwtRequest;
 import com.example.announcementproject.models.JwtResponse;
 import com.example.announcementproject.services.impl.CustomUserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,21 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class JwtController {
-
     private final AuthenticationManager authenticationManager;
-
     private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
-
     private final JwtUtil jwtUtil;
-
-    @Autowired
-    public JwtController(AuthenticationManager authenticationManager, CustomUserDetailsServiceImpl customUserDetailsServiceImpl, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.customUserDetailsServiceImpl = customUserDetailsServiceImpl;
-        this.jwtUtil = jwtUtil;
-    }
-
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println(jwtRequest);
@@ -50,5 +41,4 @@ public class JwtController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
-
 }

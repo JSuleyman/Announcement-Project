@@ -1,24 +1,19 @@
 package com.example.announcementproject.services.impl;
 
+import com.example.announcementproject.exceptions.CityAlreadyExist;
+import com.example.announcementproject.exceptions.CityNotFoundException;
 import com.example.announcementproject.models.City;
 import com.example.announcementproject.repositories.CityRepository;
 import com.example.announcementproject.services.inter.CityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
-
-
-    CityRepository cityRepository;
-
-    @Autowired
-    public CityServiceImpl(CityRepository cityRepository) {
-        this.cityRepository = cityRepository;
-    }
+    private final CityRepository cityRepository;
 
     @Override
     public List<City> getAll() {
@@ -26,29 +21,29 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public Optional<City> getCityById(Integer id) {
-        return cityRepository.findById(id);
+    public City getCityById(Integer cityId) {
+        return cityRepository.findById(cityId).stream()
+                .findFirst()
+                .orElseThrow(CityNotFoundException::new);
     }
 
     @Override
-    public void addCity(City city) {
-        List<City> cities = cityRepository.findAll();
-
-        for (int i = 0; i < cities.size(); i++) {
-            if (city.getCityName().equalsIgnoreCase(cities.get(i).getCityName())){
-                return;
-            }
+    public void add(City city) {
+        try {
+            cityRepository.save(city);
+        } catch (RuntimeException e) {
+            throw new CityAlreadyExist();
         }
-        cityRepository.save(city);
     }
 
     @Override
-    public void updateCity(Integer id, City city) {
-        Optional<City> city1 = cityRepository.findById(id);
+    public void update(Integer cityId, City newCity) {
+        City city = cityRepository.findById(cityId).stream()
+                .findFirst()
+                .orElseThrow(CityNotFoundException::new);
 
-        City city2 = city1.get();
-        city2.setCityName(city.getCityName());
+        city.setCityName(newCity.getCityName());
 
-        cityRepository.save(city2);
+        cityRepository.save(city);
     }
 }

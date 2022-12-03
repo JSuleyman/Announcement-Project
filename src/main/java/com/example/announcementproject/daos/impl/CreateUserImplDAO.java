@@ -11,8 +11,6 @@ import javax.transaction.Transactional;
 
 @Component
 public class CreateUserImplDAO implements CreateUserDAO {
-
-
     @PersistenceContext
     EntityManager entityManager;
 

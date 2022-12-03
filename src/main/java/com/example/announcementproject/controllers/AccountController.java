@@ -2,34 +2,31 @@ package com.example.announcementproject.controllers;
 
 
 import com.example.announcementproject.services.inter.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/balance")
+@RequestMapping("/accounts")
+@RequiredArgsConstructor
 public class AccountController {
-    AccountService accountService;
+    private final AccountService accountService;
 
-    @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
+    @GetMapping("/balance")
+    public ResponseEntity<Double> getByUserId(@RequestParam Integer userId) {
+        return new ResponseEntity<>(accountService.getByUserId(userId), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getUserBalance")
-    public ResponseEntity<Double> getUserAccountBalance(@RequestParam Integer id, @RequestParam String userName){
-        return new ResponseEntity<>(accountService.getUserAccountBalance(id, userName), HttpStatus.ACCEPTED);
+    @PutMapping("/balance")
+    public ResponseEntity<Double> increaseBalance(@RequestParam Integer userId, @RequestParam Double amount) {
+        return new ResponseEntity<>(accountService.increaseBalance(amount, userId), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/increaseBalance")
-    ResponseEntity<Double> increaseBalance(@RequestParam Double balance, @RequestParam Integer id){
-        return new ResponseEntity<>(accountService.increaseBalance(balance, id), HttpStatus.ACCEPTED);
+    @PutMapping("/vip")
+    public ResponseEntity<Double> doVIP(@RequestParam Integer userId) {
+        return new ResponseEntity<>(accountService.doVIP(userId), HttpStatus.ACCEPTED);
     }
 
-
-    @PostMapping("/doVIP")
-    ResponseEntity<Double> doVIP(@RequestParam Integer id){
-        return new ResponseEntity<>(accountService.doVIP(id), HttpStatus.ACCEPTED);
-    }
+    // GET accounts/{accountID}/balance
 }

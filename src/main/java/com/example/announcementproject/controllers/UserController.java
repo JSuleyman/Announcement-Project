@@ -3,7 +3,7 @@ package com.example.announcementproject.controllers;
 import com.example.announcementproject.dto.UserDTO;
 import com.example.announcementproject.models.User;
 import com.example.announcementproject.services.inter.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,18 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
-    UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-
-    @GetMapping("/getAll")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
         List<User> users = userService.getAll();
         List<UserDTO> list = new ArrayList<>();
@@ -32,28 +26,30 @@ public class UserController {
             UserDTO userDTO = new UserDTO(user);
             list.add(userDTO);
         }
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable Integer id) {
-        User user = userService.getUserById(id);
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDTO> getById(@PathVariable("id") Integer userId) {
+        User user = userService.getUserById(userId);
         UserDTO userDTO = new UserDTO(user);
+
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping("/register")
-    public void registerUser(@RequestBody User user) {
-        userService.registerUser(user);
+    @PostMapping
+    public void register(@RequestBody User user) {
+        userService.register(user);
     }
 
-    @PutMapping("/updateUser/{id}")
-    public void updateUser(@PathVariable Integer id, @RequestBody User user) {
-        userService.updateUser(id, user);
+    @PutMapping("/{id}")
+    public void update(@PathVariable("id") Integer userId, @RequestBody User user) {
+        userService.update(userId, user);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public void deleteById(@PathVariable Integer id) {
-        userService.deleteUserById(id);
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable("id") Integer userId) {
+        userService.deleteById(userId);
     }
 }

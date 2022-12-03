@@ -1,123 +1,84 @@
 package com.example.announcementproject.services.impl;
 
 import com.example.announcementproject.daos.inter.AnnounceDAO;
-import com.example.announcementproject.enums.*;
-import com.example.announcementproject.exceptions.NotFoundAnnouncement;
-import com.example.announcementproject.exceptions.NotFoundUser;
+import com.example.announcementproject.dto.AnnouncementSearchFilter;
+import com.example.announcementproject.exceptions.AnnouncementNotFoundException;
+import com.example.announcementproject.exceptions.UserNotFoundException;
 import com.example.announcementproject.models.Announcement;
-import com.example.announcementproject.models.User;
 import com.example.announcementproject.repositories.AnnouncementRepository;
 import com.example.announcementproject.repositories.UserRepository;
 import com.example.announcementproject.services.inter.AnnouncementService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AnnouncementServiceImpl implements AnnouncementService {
-
-    AnnounceDAO announceDAO;
-
-    AnnouncementRepository announcementRepository;
-    UserRepository userRepository;
-
-    @Autowired
-    public AnnouncementServiceImpl(AnnounceDAO announceDAO, UserRepository userRepository, AnnouncementRepository createAnnounceRepository) {
-        this.announceDAO = announceDAO;
-        this.userRepository = userRepository;
-        this.announcementRepository = createAnnounceRepository;
-    }
+    private final AnnounceDAO announceDAO;
+    private final AnnouncementRepository announcementRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public List<Announcement> getAll() {
+    public List<Announcement> findAll() {
         return announcementRepository.findAll();
     }
 
     @Override
-    public Optional<Announcement> getById(Integer id) {
-
-        if (announcementRepository.findById(id).isEmpty()) throw new NotFoundAnnouncement();
-        {
-            return announcementRepository.findById(id);
-        }
-
-
+    public Announcement getById(Integer announcementId) {
+        return announcementRepository.findById(announcementId).stream()
+                .findFirst()
+                .orElseThrow(AnnouncementNotFoundException::new);
     }
 
     @Override
-    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double minPrice, Double maxPrice, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer minYear, Integer maxYear, Double minEngineVolume, Double maxEngineVolume, Integer minEnginePower, Integer maxEnginePower, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
-
-        List<Announcement> announcementList = announceDAO.getSearch(brandName, modelName, cityName, banType, mileage, mileageType, color, minPrice, maxPrice, currency, ownersNumber, fuelType, transmitter, gearbox, minYear, maxYear, minEngineVolume, maxEngineVolume, minEnginePower, maxEnginePower, marketAddresses, repair, seatsNumber, vendorType, salesType);
-
-        List<Announcement> announcements = new ArrayList<>();
-
-        for (Announcement value : announcementList) {
-            if (value.getUserId().getAccount().getVip()) {
-                announcements.add(value);
-            }
-        }
-
-        for (Announcement value : announcementList) {
-            if (!value.getUserId().getAccount().getVip()) {
-                announcements.add(value);
-            }
-        }
-
-        return announcements;
+    public List<Announcement> getSearch(AnnouncementSearchFilter filter) {
+        return announceDAO.getSearch(filter);
     }
 
     @Override
-    public void createAnnouncement(Announcement createAnnounce, Integer userId) {
+    public void create(Announcement createAnnounce) {
+        userRepository.getUserById(createAnnounce.getUser().getId()).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-
-        User user = userRepository.getUserById(userId);
-        if (!(Objects.equals(createAnnounce.getUserId().getId(), userId) && user != null)) throw new NotFoundUser();
-        {
-
-            announceDAO.createAnnouncement(createAnnounce, userId);
-        }
+        announceDAO.createAnnouncement(createAnnounce);
     }
 
     @Override
-    public void updateAnnouncement(Integer id, Announcement updateAnnouncement, String userName) {
-        Optional<Announcement> announcement = announcementRepository.findById(id);
+    public void update(Integer announcementId, Announcement updateAnnouncement, String userName) {
+        Announcement announcement = announcementRepository.findById(announcementId).stream()
+                .findFirst()
+                .orElseThrow(AnnouncementNotFoundException::new);
 
-        if (!announcement.isPresent()) throw new NotFoundAnnouncement();
-        {
+        if (announcement.getUser().getName().equals(userName)) {
+            announcement.setMileage(updateAnnouncement.getMileage());
+            announcement.setColor(updateAnnouncement.getColor());
+            announcement.setPrice(updateAnnouncement.getPrice());
+            announcement.setCurrency(updateAnnouncement.getCurrency());
+            announcement.setRepair(updateAnnouncement.getRepair());
+            announcement.setVendorType(updateAnnouncement.getVendorType());
+            announcement.setSalesType(updateAnnouncement.getSalesType());
+            announcement.setDescription(updateAnnouncement.getDescription());
+            announcement.setVehicleEquip(updateAnnouncement.getVehicleEquip());
 
-            if (!announcement.get().getUserId().getName().equals(userName)) throw new NotFoundUser();
-            {
-
-                Announcement announcement1 = announcement.get();
-
-                announcement1.setMileage(updateAnnouncement.getMileage());
-                announcement1.setColor(updateAnnouncement.getColor());
-                announcement1.setPrice(updateAnnouncement.getPrice());
-                announcement1.setCurrency(updateAnnouncement.getCurrency());
-                announcement1.setRepair(updateAnnouncement.getRepair());
-                announcement1.setVendorType(updateAnnouncement.getVendorType());
-                announcement1.setSalesType(updateAnnouncement.getSalesType());
-                announcement1.setDescription(updateAnnouncement.getDescription());
-                announcement1.setVehicleEquip(updateAnnouncement.getVehicleEquip());
-
-                announcementRepository.save(announcement1);
-            }
+            announcementRepository.save(announcement);
+        } else {
+            throw new UserNotFoundException();
         }
     }
 
     @Override
-    public void deleteById(Integer id, String userName) {
-        Optional<Announcement> announcement = announcementRepository.findById(id);
+    public void deleteById(Integer announcementId, String userName) {
+        Announcement announcement = announcementRepository.findById(announcementId).stream()
+                .findFirst()
+                .orElseThrow(AnnouncementNotFoundException::new);
 
-        if (announcement.isPresent()) throw new NotFoundAnnouncement();
-        {
-            if (!announcement.get().getUserId().getName().equals(userName)) throw new NotFoundUser();{
-                announcementRepository.deleteById(id);
-            }
+        if (announcement.getUser().getName().equals(userName)) {
+            announcementRepository.deleteById(announcementId);
+        } else {
+            throw new UserNotFoundException();
         }
     }
 }

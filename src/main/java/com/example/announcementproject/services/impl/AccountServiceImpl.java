@@ -1,80 +1,78 @@
 package com.example.announcementproject.services.impl;
 
 import com.example.announcementproject.exceptions.AccountBalanceException;
-import com.example.announcementproject.exceptions.NotFoundUser;
+import com.example.announcementproject.exceptions.UserNotFoundException;
 import com.example.announcementproject.models.Account;
 import com.example.announcementproject.models.User;
 import com.example.announcementproject.repositories.AccountRepository;
 import com.example.announcementproject.repositories.UserRepository;
 import com.example.announcementproject.services.inter.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
-    AccountRepository accountRepository;
-    UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, UserRepository userRepository) {
-        this.accountRepository = accountRepository;
-        this.userRepository = userRepository;
-    }
-
+    private final UserRepository userRepository;
 
     @Override
-    public Double getUserAccountBalance(Integer userId, String userName) {
+    public Double getByUserId(Integer userId) {
+        User user = userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-        User user = userRepository.getUserById(userId);
         Account account = accountRepository.getUserAccount(user);
-        if (user == null) throw new NotFoundUser();
-        {
-            if (account != null) {
-                if (!user.getName().equals(userName)) throw new NotFoundUser();
-                {
-                    return account.getBalance();
-                }
-            }
-        }
 
-        if (user != null && account == null) {
-            Account newAccount = Account.builder().balance(0.0).userId(user).vip(false).build();
+        if (Objects.isNull(account)) {
+            Account newAccount = Account.builder()
+                    .balance(0.0)
+                    .userId(user)
+                    .vip(false)
+                    .build();
             accountRepository.save(newAccount);
             return newAccount.getBalance();
         }
-        return null;
+
+        return account.getBalance();
     }
 
     @Override
-    public Double increaseBalance(Double balance, Integer userId) {
-        User user = userRepository.getUserById(userId);
-        String name = user.getName();
+    public Double increaseBalance(Double amount, Integer userId) {
+        User user = userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-        Double getBalance = getUserAccountBalance(userId, name);
-
+        Double getBalance = getByUserId(userId);
 
         Account account = accountRepository.getUserAccount(user);
-        Double newBalance = getBalance + balance;
+        Double newBalance = getBalance + amount;
         account.setBalance(newBalance);
         accountRepository.save(account);
-        return account.getBalance();
 
+        return account.getBalance();
     }
 
-    public Double doVIP(Integer id) {
-        User user = userRepository.getUserById(id);
-        String name = user.getName();
+    public Double doVIP(Integer userId) {
+        User user = userRepository.getUserById(userId).stream()
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
 
-        Double getBalance = getUserAccountBalance(id, name);
+        Double getBalance = getByUserId(userId);
         Account account = accountRepository.getUserAccount(user);
 
-        if (!(getBalance >= 15)) throw new AccountBalanceException();
-        {
+        if (getBalance >= 15) {
             Double newBalance = getBalance - 15;
             account.setBalance(newBalance);
             account.setVip(true);
             accountRepository.save(account);
-            return account.getBalance();
+        } else {
+            throw new AccountBalanceException();
         }
+
+        return account.getBalance();
     }
 }

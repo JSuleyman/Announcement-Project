@@ -31,8 +31,8 @@ public class AnnounceSearchDTO {
 
     public AnnounceSearchDTO(Announcement c) {
         this.id = c.getId();
-        this.phoneNumber = c.getUserId().getPhoneNumber();
-        this.cityName = c.getUserId().getCityId().getCityName();
+        this.phoneNumber = c.getUser().getPhoneNumber();
+        this.cityName = c.getUser().getCityId().getCityName();
         this.brandName = c.getBrandId().getBrandName();
         this.modelName = c.getModelId().getModelName();
         this.banType = c.getBanType().getValue();

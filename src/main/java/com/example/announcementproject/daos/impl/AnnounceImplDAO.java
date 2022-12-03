@@ -1,10 +1,10 @@
 package com.example.announcementproject.daos.impl;
 
 import com.example.announcementproject.daos.inter.AnnounceDAO;
-import com.example.announcementproject.enums.*;
+import com.example.announcementproject.dto.AnnouncementSearchFilter;
+import com.example.announcementproject.models.Announcement;
 import com.example.announcementproject.models.CarBrand;
 import com.example.announcementproject.models.CarModel;
-import com.example.announcementproject.models.Announcement;
 import com.example.announcementproject.models.User;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +16,12 @@ import java.util.List;
 
 @Component
 public class AnnounceImplDAO implements AnnounceDAO {
-
-
     @PersistenceContext
     EntityManager entityManager;
 
     @Transactional
     @Override
-    public void createAnnouncement(Announcement c, Integer userId) {
+    public void createAnnouncement(Announcement c) {
         entityManager.createNativeQuery("INSERT INTO announcements(brand_id, model_id, ban_type," +
                         "mileage,mileage_type, color, price,currency, " +
                         "owners_number, fuel_type,transmitter, gearbox,car_year, " +
@@ -52,213 +50,214 @@ public class AnnounceImplDAO implements AnnounceDAO {
                 .setParameter(20, c.getSalesType().name())
                 .setParameter(21, c.getDescription())
                 .setParameter(22, c.getVehicleEquip())
-                .setParameter(23, new User(c.getUserId().getId()))
+                .setParameter(23, new User(c.getUser().getId()))
                 .executeUpdate();
     }
+
     @Override
-    public List<Announcement> getSearch(String brandName, String modelName, String cityName, BanType banType, Integer mileage, MileageType mileageType, String color, Double minPrice, Double maxPrice, Currency currency, OwnersNumber ownersNumber, FuelType fuelType, Transmitter transmitter, Gearbox gearbox, Integer minYear, Integer maxYear, Double minEngineVolume, Double maxEngineVolume, Integer minEnginePower, Integer maxEnginePower, MarketAddresses marketAddresses, Repair repair, SeatsNumber seatsNumber, VendorType vendorType, SalesType salesType) {
+    public List<Announcement> getSearch(AnnouncementSearchFilter filter) {
         String sql = "SELECT a from Announcement a where 1=1";
 
-        if (brandName != null) {
+        if (filter.getBrandName() != null) {
             sql += " AND a.brandId.brandName =: brandName";
         }
 
-        if (modelName != null) {
+        if (filter.getModelName() != null) {
             sql += " AND a.modelId.modelName =: modelName";
         }
 
-        if (cityName != null) {
+        if (filter.getCityName() != null) {
             sql += " AND a.userId.cityId.cityName =: cityName";
         }
 
-        if (banType != null) {
+        if (filter.getBanType() != null) {
             sql += " AND a.banType =: banType";
         }
 
-        if (mileage != null) {
+        if (filter.getMileage() != null) {
             sql += " AND a.mileage =: mileage";
         }
 
-        if (mileageType != null) {
+        if (filter.getMileageType() != null) {
             sql += " AND a.mileageType =: mileageType";
         }
 
-        if (color != null) {
+        if (filter.getColor() != null) {
             sql += " AND a.color =: color";
         }
 
-        if (minPrice != null) {
+        if (filter.getMinPrice() != null) {
             sql += " AND a.price >=: minPrice";
         }
 
-        if (maxPrice != null) {
+        if (filter.getMaxPrice() != null) {
             sql += " AND a.price <=: maxPrice";
         }
 
-        if (currency != null) {
+        if (filter.getCurrency() != null) {
             sql += " AND a.currency =: currency";
         }
 
-        if (ownersNumber != null) {
+        if (filter.getOwnersNumber() != null) {
             sql += " AND a.ownersNumber =: ownersNumber";
         }
 
-        if (fuelType != null) {
+        if (filter.getFuelType() != null) {
             sql += " AND a.fuelType =: fuelType";
         }
 
-        if (transmitter != null) {
+        if (filter.getTransmitter() != null) {
             sql += " AND a.transmitter =: transmitter";
         }
 
-        if (gearbox != null) {
+        if (filter.getGearbox() != null) {
             sql += " AND a.gearbox =: gearbox";
         }
 
-        if (minYear != null){
+        if (filter.getMinYear() != null) {
             sql += " AND a.carYear >=: minYear";
         }
 
-        if (maxYear != null){
+        if (filter.getMaxYear() != null) {
             sql += " AND a.carYear <=: maxYear";
         }
 
-        if (minEngineVolume != null) {
+        if (filter.getMinEngineVolume() != null) {
             sql += " AND a.engineVolume >=: minEngineVolume";
         }
 
-        if (maxEngineVolume != null) {
+        if (filter.getMaxEngineVolume() != null) {
             sql += " AND a.engineVolume <=: maxEngineVolume";
         }
 
-        if (minEnginePower != null) {
+        if (filter.getMinEnginePower() != null) {
             sql += " AND a.enginePower >=: minEnginePower";
         }
 
-        if (maxEnginePower != null) {
+        if (filter.getMaxEnginePower() != null) {
             sql += " AND a.enginePower <=: maxEnginePower";
         }
 
-        if (marketAddresses != null) {
+        if (filter.getMarketAddresses() != null) {
             sql += " AND a.marketAddresses =: marketAddresses";
         }
 
-        if (repair != null) {
+        if (filter.getRepair() != null) {
             sql += " AND a.repair =: repair";
         }
 
-        if (seatsNumber != null) {
+        if (filter.getSeatsNumber() != null) {
             sql += " AND a.seatsNumber =: seatsNumber";
         }
 
-        if (vendorType != null) {
+        if (filter.getVendorType() != null) {
             sql += " AND a.vendorType =: vendorType";
         }
 
-        if (salesType != null) {
+        if (filter.getSalesTyp() != null) {
             sql += " AND a.salesType =: salesType";
         }
 
         Query q = entityManager.createQuery(sql);
 
-        if (brandName != null) {
-            q.setParameter("brandName", brandName);
+        if (filter.getBrandName() != null) {
+            q.setParameter("brandName", filter.getBrandName());
         }
 
-        if (modelName != null) {
-            q.setParameter("modelName", modelName);
+        if (filter.getModelName() != null) {
+            q.setParameter("modelName", filter.getModelName());
         }
 
-        if (cityName != null) {
-            q.setParameter("cityName", cityName);
+        if (filter.getCityName() != null) {
+            q.setParameter("cityName", filter);
         }
 
-        if (banType != null) {
-            q.setParameter("banType", banType);
+        if (filter.getBanType() != null) {
+            q.setParameter("banType", filter.getBanType());
         }
 
-        if (mileage != null) {
-            q.setParameter("mileage", mileage);
+        if (filter.getMileage() != null) {
+            q.setParameter("mileage", filter.getMileage());
         }
 
-        if (mileageType != null) {
-            q.setParameter("mileageType", mileageType);
+        if (filter.getMileageType() != null) {
+            q.setParameter("mileageType", filter.getMileageType());
         }
 
-        if (color != null) {
-            q.setParameter("color", color);
+        if (filter.getColor() != null) {
+            q.setParameter("color", filter.getColor());
         }
 
-        if (minPrice != null) {
-            q.setParameter("minPrice", minPrice);
+        if (filter.getMinPrice() != null) {
+            q.setParameter("minPrice", filter.getMinPrice());
         }
 
-        if (maxPrice != null) {
-            q.setParameter("maxPrice", maxPrice);
+        if (filter.getMaxPrice() != null) {
+            q.setParameter("maxPrice", filter.getMaxPrice());
         }
 
-        if (currency != null) {
-            q.setParameter("currency", currency);
+        if (filter.getCurrency() != null) {
+            q.setParameter("currency", filter.getCurrency());
         }
 
-        if (ownersNumber != null) {
-            q.setParameter("ownersNumber", ownersNumber);
+        if (filter.getOwnersNumber() != null) {
+            q.setParameter("ownersNumber", filter.getOwnersNumber());
         }
 
-        if (fuelType != null) {
-            q.setParameter("fuelType", fuelType);
+        if (filter.getFuelType() != null) {
+            q.setParameter("fuelType", filter.getFuelType());
         }
 
-        if (transmitter != null) {
-            q.setParameter("transmitter", transmitter);
+        if (filter.getTransmitter() != null) {
+            q.setParameter("transmitter", filter.getTransmitter());
         }
 
-        if (gearbox != null) {
-            q.setParameter("gearbox", gearbox);
+        if (filter.getGearbox() != null) {
+            q.setParameter("gearbox", filter.getGearbox());
         }
 
-        if (minYear != null){
-            q.setParameter("minYear", minYear);
+        if (filter.getMinYear() != null) {
+            q.setParameter("minYear", filter.getMinYear());
         }
 
-        if (maxYear != null){
-            q.setParameter("maxYear", maxYear);
+        if (filter.getMaxYear() != null) {
+            q.setParameter("maxYear", filter.getMaxYear());
         }
 
-        if (minEngineVolume != null) {
-            q.setParameter("minEngineVolume", minEngineVolume);
+        if (filter.getMinEnginePower() != null) {
+            q.setParameter("minEngineVolume", filter.getMinEngineVolume());
         }
 
-        if (maxEngineVolume != null) {
-            q.setParameter("maxEngineVolume", maxEngineVolume);
+        if (filter.getMaxEngineVolume() != null) {
+            q.setParameter("maxEngineVolume", filter.getMaxEngineVolume());
         }
 
-        if (minEnginePower != null) {
-            q.setParameter("minEnginePower", minEnginePower);
+        if (filter.getMinEnginePower() != null) {
+            q.setParameter("minEnginePower", filter.getMinEnginePower());
         }
 
-        if (maxEnginePower != null) {
-            q.setParameter("maxEnginePower", maxEnginePower);
+        if (filter.getMaxEnginePower() != null) {
+            q.setParameter("maxEnginePower", filter.getMaxEnginePower());
         }
 
-        if (marketAddresses != null) {
-            q.setParameter("marketAddresses", marketAddresses);
+        if (filter.getMarketAddresses() != null) {
+            q.setParameter("marketAddresses", filter.getMarketAddresses());
         }
 
-        if (repair != null) {
-            q.setParameter("repair", repair);
+        if (filter.getRepair() != null) {
+            q.setParameter("repair", filter.getRepair());
         }
 
-        if (seatsNumber != null) {
-            q.setParameter("seatsNumber", seatsNumber);
+        if (filter.getSeatsNumber() != null) {
+            q.setParameter("seatsNumber", filter.getSeatsNumber());
         }
 
-        if (vendorType != null) {
-            q.setParameter("vendorType", vendorType);
+        if (filter.getVendorType() != null) {
+            q.setParameter("vendorType", filter.getVendorType());
         }
 
-        if (salesType != null) {
-            q.setParameter("salesType", salesType);
+        if (filter.getSalesTyp() != null) {
+            q.setParameter("salesType", filter.getSalesTyp());
         }
 
         List<Announcement> announcementList = q.getResultList();

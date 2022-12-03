@@ -3,7 +3,6 @@ package com.example.announcementproject.dto;
 import com.example.announcementproject.models.City;
 
 public class CityDTO {
-
     Integer id;
     String city;
 

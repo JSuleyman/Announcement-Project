@@ -46,7 +46,7 @@ public class User {
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     Account account;
 
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "userId", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     Collection<Announcement> announcements;
 

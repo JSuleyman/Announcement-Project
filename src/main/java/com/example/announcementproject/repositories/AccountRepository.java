@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<Account,Integer> {
       @Query("SELECT a from Account a where a.userId = ?1")
-      Account getUserAccount(User userId);
+      Account getUserAccount(User userId); //TODO User olmayanda isdemir
 }
