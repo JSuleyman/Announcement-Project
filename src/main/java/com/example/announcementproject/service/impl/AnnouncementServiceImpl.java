@@ -16,8 +16,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AnnouncementServiceImpl implements AnnouncementService {
+
     private final AnnounceDAO announceDAO;
+
     private final AnnouncementRepository announcementRepository;
+
     private final UserRepository userRepository;
 
     @Override

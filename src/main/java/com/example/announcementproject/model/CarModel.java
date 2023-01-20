@@ -13,6 +13,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CarModel{
+
     @Id
     @Column(name = "id",nullable = false)
     Integer id;
@@ -31,4 +32,5 @@ public class CarModel{
     public CarModel(Integer id) {
         this.id = id;
     }
+
 }

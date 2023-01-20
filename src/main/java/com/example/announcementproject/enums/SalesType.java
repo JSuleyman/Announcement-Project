@@ -11,6 +11,7 @@ public enum SalesType {
     SalesType(final String value){
         this.value = value;
     }
+
     public String getValue(){
         return value;
     }

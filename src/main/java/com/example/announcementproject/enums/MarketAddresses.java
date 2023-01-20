@@ -15,7 +15,9 @@ public enum MarketAddresses {
     MarketAddresses(final String value){
         this.value = value;
     }
+
     public String getValue(){
         return value;
     }
+
 }

@@ -19,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class JwtController {
+
     private final AuthenticationManager authenticationManager;
+
     private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
+
     private final JwtUtil jwtUtil;
+
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println(jwtRequest);
@@ -40,4 +44,5 @@ public class JwtController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
+
 }

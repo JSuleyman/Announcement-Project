@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping
@@ -40,4 +41,5 @@ public class UserController {
     public void deleteById(@PathVariable("id") Integer userId) {
         userService.deleteById(userId);
     }
+
 }

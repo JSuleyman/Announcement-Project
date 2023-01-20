@@ -12,6 +12,7 @@ public enum OwnersNumber {
     OwnersNumber(final String value){
         this.value = value;
     }
+
     public String getValue(){
         return value;
     }

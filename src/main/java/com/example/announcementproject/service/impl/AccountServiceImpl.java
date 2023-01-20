@@ -58,6 +58,7 @@ public class AccountServiceImpl implements AccountService {
         return account.getBalance();
     }
 
+    @Override
     public Double doVIP(Integer userId) {
         User user = userRepository.getUserById(userId).stream()
                 .findFirst()
@@ -77,4 +78,5 @@ public class AccountServiceImpl implements AccountService {
 
         return account.getBalance();
     }
+
 }

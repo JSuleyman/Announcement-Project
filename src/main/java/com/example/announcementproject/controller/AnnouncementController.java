@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/announcements")
 @RequiredArgsConstructor
 public class AnnouncementController {
+
     private final AnnouncementService announcementService;
 
     @GetMapping
@@ -50,4 +51,5 @@ public class AnnouncementController {
     public void deleteById(@PathVariable("id") Integer announcementId, @RequestParam String userName) {
         announcementService.deleteById(announcementId, userName);
     }
+
 }

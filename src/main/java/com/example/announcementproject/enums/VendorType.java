@@ -5,12 +5,15 @@ public enum VendorType {
     AVTOSALONLAR("Avtosalonlar"),
     SEXSI("Şəxsi"),
     NULL("Null");
+
     private final String value;
 
     VendorType(final String value){
         this.value = value;
     }
+
     public String getValue(){
         return value;
     }
+
 }

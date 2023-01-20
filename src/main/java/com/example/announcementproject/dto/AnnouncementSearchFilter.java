@@ -37,4 +37,5 @@ public class AnnouncementSearchFilter {
     SeatsNumber seatsNumber;
     VendorType vendorType;
     SalesType salesTyp;
+
 }

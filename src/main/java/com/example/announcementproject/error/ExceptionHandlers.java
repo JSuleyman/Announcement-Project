@@ -37,4 +37,5 @@ public class ExceptionHandlers {
     public ResponseEntity<Object> cityAlreadyExist() {
         return new ResponseEntity<>("City already exist", HttpStatus.ALREADY_REPORTED);
     }
+
 }

@@ -16,6 +16,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -50,4 +51,5 @@ public class User {
     public User(Integer id) {
         this.id = id;
     }
+
 }

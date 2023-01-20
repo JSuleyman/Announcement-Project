@@ -13,6 +13,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class City {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -24,7 +25,13 @@ public class City {
     @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "cityId")
     Collection<User> userCollection;
+
     public City(Integer id) {
         this.id = id;
+    }
+
+    public City(Integer i, String cityName) {
+        this.id = i;
+        this.cityName = cityName;
     }
 }

@@ -14,6 +14,7 @@ import javax.validation.constraints.Min;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "account_sequence",initialValue = 1,allocationSize = 1)
@@ -34,4 +35,5 @@ public class Account {
     public Account(Double balance){
         this.balance = balance;
     }
+
 }

@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/cities")
 @RequiredArgsConstructor
 public class CityController {
+
     private final CityService cityService;
 
     @GetMapping
@@ -36,4 +37,5 @@ public class CityController {
     public void update(@PathVariable("id") Integer cityId, @RequestBody City city) {
         cityService.update(cityId, city);
     }
+
 }

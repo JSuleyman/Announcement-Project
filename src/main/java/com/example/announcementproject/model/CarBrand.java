@@ -32,4 +32,5 @@ public class CarBrand {
     public CarBrand(Integer id) {
         this.id = id;
     }
+
 }

@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Announcement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -104,4 +105,5 @@ public class Announcement {
 
     @Column(columnDefinition = "TEXT", name = "vehicle_equip")
     String vehicleEquip;
+
 }
